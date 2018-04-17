@@ -4,7 +4,7 @@ $client_id = "1000.4H6Z54RLYWBS70321WEUN90IZJP5NJ";
 $client_secret = "85dce0fa056b2c3dc0d1b9b02bb8db89890da549aa";
 $redirect_uri = "http://local.zoho.com/callback.php";
 $auth_token = "";
-
+$orgid = "666074619";
 function request($post, $curl_url){
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $curl_url);
@@ -61,7 +61,6 @@ function createContact($data){
 	}
 	
 	var_dump($post_data);
-
 }
 
 
@@ -73,14 +72,22 @@ function getOrgId(){
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_HEADER, true);
+    // curl_setopt($ch, CURLOPT_HEADER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Authorization:Zoho-oauthtoken: '.$GLOBALS['auth_token'],
+    'Authorization:Zoho-oauthtoken '.$GLOBALS['auth_token'],
+    "Content-Type: application/json",
     ));
     $result = curl_exec($ch);
 	curl_close($ch);
+	var_dump($result);
+	echo "<br>";
+	echo $result['data'];
+	echo "<br>";
+	$result = json_decode($result);
 	echo "<pre>";
-	print_r($result);
+	print_r($result['data']);
 	echo "</pre>";
-	return $result;
+	echo "<br>";
+	
+	return $result['data'][0]['id'];
 }
