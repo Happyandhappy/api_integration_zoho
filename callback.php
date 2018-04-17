@@ -1,6 +1,6 @@
 <?php
 require_once ("init.php");
-require_once "ZohoDesk_API.php";
+require_once "ZohoApi.php";
 if(count($_GET)>0){
 	if (isset($_GET['code'])) {
 		getToken();
@@ -8,16 +8,21 @@ if(count($_GET)>0){
 	else if (isset($_GET['authtoken'])){
 		$GLOBALS['token'] = $_GET['authtoken'];
 		$GLOBALS['orgId'] = $_GET['orgId'];
+
+		$zoho = new ZohoApi($_GET['authtoken'], $_GET['orgId']);
 	    $sendData = array();
 	    foreach($_GET as $key=>$value){
-	        $sendData[$key]=$value;
+	    	if ($key != "authtoken" && $key != "orgId")
+	        	$sendData[$key]=$value;
 	    }
-	    getContactbyTicket();
 
+	    $zoho->createContact($sendData);                //Create new Contact 
+	    $contactID = $zoho->search("John","contacts");  // Search Contact with seachStr "John"
+	    echo $contactID."<br/>";						
+	    if ($contactID!="") 
+	    	$zoho->updateContact($contactID, array("firstName"=>"ESAMPLE"));  //update contact
 	}
 }
-
-
 ?>
 
 <!DOCTYPE html>
