@@ -1,18 +1,19 @@
 <?php
 require_once ("init.php");
+require_once "ZohoDesk_API.php";
 if(count($_GET)>0){
 	if (isset($_GET['code'])) {
 		getToken();
-		getOrgId();
 	}
-	else if (isset($_GET['firstName'])){
+	else if (isset($_GET['authtoken'])){
+		$GLOBALS['token'] = $_GET['authtoken'];
+		$GLOBALS['orgId'] = $_GET['orgId'];
 	    $sendData = array();
-	    $fields = '';
 	    foreach($_GET as $key=>$value){
 	        $sendData[$key]=$value;
-	        $fields = $fields.$key.",";
 	    }
-	    createContact($sendData);
+	    getContactbyTicket();
+
 	}
 }
 
@@ -26,9 +27,17 @@ if(count($_GET)>0){
 </head>
 <body>
 	<form>
+		<?php
+			if (isset($GLOBALS['token']) && $GLOBALS['token'] !=''){
+		?>
+			<div>
+				<input type="hidden" name="authtoken" value="<?php echo($GLOBALS['token']) ?>">
+			</div>
+		<?php } ?>
+
 		<div>
 			<label>OrgID : </label>
-			<input type="text" name="orgid" value="Joseph">
+			<input type="text" name="orgId" value="<?php echo $GLOBALS['orgId'] ?>">
 		</div>
 		<div>
 			<label>First Name : </label>
