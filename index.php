@@ -8,7 +8,7 @@ require_once("init.php");
 // $client_secret = "46ba9a1177cc0f61a061b8226f8ccd832da766a8bc";
 
 
-goToAuthUrl();
+// goToAuthUrl();
 
 
        
